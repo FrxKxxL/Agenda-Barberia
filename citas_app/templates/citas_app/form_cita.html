@@ -1,0 +1,31 @@
+{% extends "citas_app/base.html" %}
+
+{% block titulo %}Nueva Cita — EstiloAgenda{% endblock %}
+
+{% block contenido %}
+<section class="panel" style="max-width: 620px; margin: 0 auto;">
+    <div class="panel-header">
+        <h2>Registrar nueva cita</h2>
+        <a href="{% url 'panel_citas' %}" class="btn btn-secundario">Volver</a>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% for campo in form %}
+            <div class="grupo-campo">
+                {{ campo.label_tag }}
+                {{ campo }}
+                {% if campo.errors %}
+                    <span class="error-texto">{{ campo.errors|striptags }}</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <div style="display: flex; gap: 0.6rem; margin-top: 1.25rem;">
+            <button type="submit" class="btn btn-primario">Guardar cita</button>
+            <a href="{% url 'panel_citas' %}" class="btn btn-secundario">Cancelar</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,11 @@
+﻿# Entorno virtual y cachés de Python
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+
+# Archivos de sistema y editores
+.DS_Store
+Thumbs.db
+.vscode/

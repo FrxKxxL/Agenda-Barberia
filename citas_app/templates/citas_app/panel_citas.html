@@ -1,0 +1,125 @@
+{% extends "citas_app/base.html" %}
+
+{% block titulo %}Panel de Citas {% endblock %}
+
+{% block contenido %}
+<section class="tarjetas-resumen">
+    <div class="tarjeta-stat">
+        <div class="etiqueta">Total de citas</div>
+        <div class="valor">{{ resumen.total }}</div>
+    </div>
+    <div class="tarjeta-stat">
+        <div class="etiqueta">Pendientes</div>
+        <div class="valor">{{ resumen.pendientes }}</div>
+    </div>
+    <div class="tarjeta-stat">
+        <div class="etiqueta">Confirmadas</div>
+        <div class="valor">{{ resumen.confirmadas }}</div>
+    </div>
+    <div class="tarjeta-stat">
+        <div class="etiqueta">Completadas</div>
+        <div class="valor">{{ resumen.completadas }}</div>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Citas programadas</h2>
+        <form method="get" class="filtros-form">
+            <div class="grupo-campo">
+                {{ form_filtro.estado.label_tag }}
+                {{ form_filtro.estado }}
+            </div>
+            <div class="grupo-campo">
+                {{ form_filtro.fecha.label_tag }}
+                {{ form_filtro.fecha }}
+            </div>
+            <button type="submit" class="btn btn-secundario">Filtrar</button>
+            <a href="{% url 'panel_citas' %}" class="btn btn-secundario">Limpiar</a>
+        </form>
+    </div>
+
+    {% if citas %}
+        <div class="tabla-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha y hora</th>
+                        <th>Cliente</th>
+                        <th>Teléfono</th>
+                        <th>Servicio</th>
+                        <th>Precio</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cita in citas %}
+                        <tr>
+                            <td><strong>{{ cita.fecha_hora }}</strong></td>
+                            <td>
+                                {{ cita.cliente_nombre }}
+                                {% if cita.cliente_notas %}
+                                    <br><small style="color: #64748b;">{{ cita.cliente_notas }}</small>
+                                {% endif %}
+                            </td>
+                            <td>{{ cita.cliente_telefono }}</td>
+                            <td>{{ cita.servicio_nombre }} ({{ cita.servicio_duracion }} min)</td>
+                            <td>${{ cita.servicio_precio|floatformat:2 }}</td>
+                            <td>
+                                <span class="badge estado-{{ cita.estado }}">{{ cita.estado }}</span>
+                            </td>
+                            <td>
+                                <div class="acciones-inline">
+                                    {% if cita.estado != "Confirmada" %}
+                                        <form method="post" action="{% url 'cambiar_estado' cita.id 'Confirmada' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-info">Confirmar</button>
+                                        </form>
+                                    {% endif %}
+                                    {% if cita.estado != "Completada" %}
+                                        <form method="post" action="{% url 'cambiar_estado' cita.id 'Completada' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-exito">Completar</button>
+                                        </form>
+                                    {% endif %}
+                                    {% if cita.estado != "Cancelada" %}
+                                        <form method="post" action="{% url 'cambiar_estado' cita.id 'Cancelada' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-secundario">Cancelar</button>
+                                        </form>
+                                    {% endif %}
+                                    <form method="post" action="{% url 'borrar_cita' cita.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-peligro">Eliminar</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="vacio">
+            <p>No hay citas que coincidan con el filtro seleccionado.</p>
+            <br>
+            <a href="{% url 'nueva_cita' %}" class="btn btn-primario">Agendar primera cita</a>
+        </div>
+    {% endif %}
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2>Catálogo base de servicios</h2>
+    </div>
+    <div class="servicios-grid">
+        {% for srv in servicios %}
+            <div class="servicio-chip">
+                <strong>{{ srv.nombre }}</strong>
+                <small>${{ srv.precio|floatformat:2 }} · {{ srv.duracion_min }} min</small>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

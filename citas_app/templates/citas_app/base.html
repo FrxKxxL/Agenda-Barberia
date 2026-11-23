@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Agenda Salón Estilo Urbano{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'citas_app/css/estilos.css' %}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a href="{% url 'panel_citas' %}" class="brand">Barberia<span>YOLO</span></a>
+            <nav>
+                <a href="{% url 'panel_citas' %}" class="btn btn-secundario">Agenda</a>
+                <a href="{% url 'nueva_cita' %}" class="btn btn-primario">+ Nueva cita</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="contenedor">
+        {% if messages %}
+            <div class="alertas">
+                {% for message in messages %}
+                    <div class="alerta alerta-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block contenido %}{% endblock %}
+    </main>
+</body>
+</html>
