@@ -22,5 +22,39 @@ Para ejecutar este proyecto en una computadora local necesitas tener instalado:
 Abre una terminal (PowerShell, CMD o terminal de VS Code) y ejecuta:
 
 ```bash
-git clone https://github.com/FrxKxxL/Agenda-Barberia.git
-cd Agenda-Barberia
+
+1. Obtener el código fuente
+Clona el repositorio desde GitHub y entra a la carpeta del proyecto:
+git clone https://github.com/FrxKxxL/Agenda-Barberia
+
+(Si descargaste el repositorio en formato ZIP, descomprímelo y abre una terminal dentro de la carpeta raíz donde se encuentra manage.py).
+2. Crear y activar un entorno virtual
+En Windows (PowerShell):
+python -m venv .venv
+.venv\Scripts\activate
+
+(Si PowerShell bloquea la ejecución de scripts por políticas locales, ejecuta primero Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned y vuelve a activar .venv\Scripts\activate).
+
+En Linux / macOS:
+
+python3 -m venv .venv
+source .venv/bin/activate
+
+3. Instalar Django
+
+Con el entorno virtual activado, instala Django:
+pip install django
+
+4. Ejecutar el servidor de desarrollo
+Inicia el servidor local de Django:
+
+python manage.py runserver
+
+5. Abrir la aplicación en el navegador
+Ingresa a la siguiente dirección en tu navegador web:
+
+http://127.0.0.1:8000/
+
+
+
+utilizando estrictamente y obligatoriamente este formato
